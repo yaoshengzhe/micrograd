@@ -1,10 +1,12 @@
 '''Micrograd core abstractions.'''
 
 import graphviz
+import math
 
 class Value:
     def __init__(self, data, _children=(), _op='', label=''):
         self.data = data
+        self.grad = 0.0
         self._prev = set(_children)
         self._op = _op
         self.label = label
@@ -18,6 +20,12 @@ class Value:
     def __mul__(self, other):
         return Value(self.data * other.data, (self, other), '*')
 
+    def tanh(self):
+        n = self.data
+        t = (math.exp(2*n) - 1) / (math.exp(2*n) + 1)
+        out = Value(t, (self, ), 'tanh')
+        return out
+        
     @staticmethod
     def _trace(root):
         nodes, edges = set(), set()
@@ -36,7 +44,7 @@ class Value:
         nodes, edges = Value._trace(self)
         for n in nodes:
             uid = str(id(n))
-            dot.node(name=uid, label="{ %s | data %.4f }" % (n.label, n.data, ), shape='record')
+            dot.node(name=uid, label="{ %s | data %.4f | grad %.4f }" % (n.label, n.data, n.grad, ), shape='record')
 
             if n._op:
                 dot.node(name=uid+n._op, label=n._op)
