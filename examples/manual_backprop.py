@@ -7,7 +7,7 @@ if __name__ == '__main__':
     w1 = micrograd.core.Value(-3.0, label='w1')
     w2 = micrograd.core.Value(1.0, label='w2')
 
-    b = micrograd.core.Value(6.7, label='b')
+    b = micrograd.core.Value(6.8813735, label='b')
 
     x1w1 = x1*w1
     x1w1.label = 'x1*w1'
@@ -20,5 +20,7 @@ if __name__ == '__main__':
     n = x1w1x2w2 + b
     n.label = 'n'
     o = n.tanh()
-    
+
+    o.backward()
+
     print(o.draw())
