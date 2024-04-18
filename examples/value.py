@@ -10,7 +10,6 @@ if __name__ == '__main__':
     c = a * b
     c.label = 'c'
     print(c)
-    
 
     d = c + micrograd.core.Value(10, label='e')
     d.label = 'd'

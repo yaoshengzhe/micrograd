@@ -1,3 +1,4 @@
+import math
 import micrograd
 
 if __name__ == '__main__':
@@ -19,7 +20,10 @@ if __name__ == '__main__':
 
     n = x1w1x2w2 + b
     n.label = 'n'
-    o = n.tanh()
+
+    e = (2*n).exp()
+    o = (e-1) / (e+1)
+    o.label = 'o'
 
     o.backward()
 
