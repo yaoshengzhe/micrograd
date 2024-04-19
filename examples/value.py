@@ -19,4 +19,4 @@ if __name__ == '__main__':
     L = d * f
     L.label = 'L'
 
-    print(L.draw())
+    print(L.relu().draw())

@@ -60,6 +60,15 @@ class Value:
         out._backward = _backward
         return out
 
+    def relu(self):
+        out = Value(max(0, self.data), (self,), 'relu')
+
+        def _backward():
+            self.grad += out.data * out.grad
+
+        out._backward = _backward
+        return out
+
     def exp(self):
         out = Value(math.exp(self.data), (self,), 'exp')
 
