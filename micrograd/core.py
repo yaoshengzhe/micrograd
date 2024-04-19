@@ -27,6 +27,9 @@ class Value:
 
         return out
 
+    def __radd__(self, other):
+        return self + other
+
     def __mul__(self, other):
         other = other if isinstance(other, Value) else Value(other)
 
@@ -39,8 +42,20 @@ class Value:
         return out
 
     def __sub__(self, other):
-        data = other.data if isinstance(other, Value) else other
-        return self + (-data)
+        other = other if isinstance(other, Value) else Value(other)
+
+        out = Value(self.data - other.data, (self, other), '-')
+        def _backward():
+            self.grad += out.grad
+            other.grad += -out.grad
+
+        out._backward = _backward
+        return out
+
+
+    def __rsub__(self, other):
+        other = other if isinstance(other, Value) else Value(other)
+        return other - self
 
     def __rmul__(self, other):
         return self * other
